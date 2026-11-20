@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamWay</title>
+<meta name="description" content="StreamWay: one directory for streaming movies, TV series, anime and live sports.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday product, confident, after-dark
+   IDEA a TV channel guide: pick a channel, see what's on
+   PICTURE four big "screens" (Movies, TV, Anime, Sports) that are the category picker
+   COLOUR near-black ground, coral "on air" red, lilac support; white ground by day
+   TYPE Archivo 800 display + Inter text
+   LAYOUT nav, hero with title+search over the screen row, toolbar, card grid, about, footer; stacks on phone */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#100e14);
+--panel:light-dark(#f4f2f7,#1a1720);
+--panel2:light-dark(#ebe7f1,#231f2b);
+--line:light-dark(#e0dbe8,#2e2938);
+--ink:light-dark(#16131a,#f4f1ee);
+--mute:light-dark(#5d5668,#a59fb0);
+--red:#ff4f45;
+--redink:light-dark(#d8302a,#ff6b62);
+--lil:light-dark(#6a55e0,#ab9cff);
+--glow:light-dark(rgba(255,79,69,.12),rgba(255,79,69,.22))}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+h1,h2,h3{font-family:Archivo,Inter,sans-serif;letter-spacing:-.02em;line-height:1.05;margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:max(5vw,16px)}
+.nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 21px/1 Archivo,sans-serif;text-decoration:none;letter-spacing:-.02em}
+.logo svg{width:30px;height:30px}
+.nav nav{margin-inline-start:auto;display:flex;gap:4px;flex-wrap:wrap}
+.nav nav a{text-decoration:none;color:var(--mute);font-weight:500;padding:10px 12px;border-radius:10px}
+.nav nav a:hover,.nav nav a:focus-visible{color:var(--ink);background:var(--panel)}
+.hero{position:relative;padding-block:clamp(32px,5vw,64px) 28px;background:radial-gradient(900px 380px at 85% 0%,var(--glow),transparent 70%)}
+.hero h1{font-size:clamp(34px,5vw,52px);font-weight:800;max-width:14ch;text-wrap:balance}
+.hero p{color:var(--mute);font-size:17px;max-width:52ch;margin:14px 0 24px}
+.search{display:flex;align-items:center;gap:10px;max-width:560px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:0 14px;height:54px}
+.search:focus-within{border-color:var(--red);box-shadow:0 0 0 3px var(--glow)}
+.search svg{width:20px;height:20px;flex:none;color:var(--mute)}
+.search input{flex:1;border:0;background:none;color:var(--ink);font:16px Inter,sans-serif;height:100%;outline:none}
+.search kbd{font:12px Inter,sans-serif;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.screens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:36px}
+.scr{all:unset;cursor:pointer;display:block;border-radius:18px;position:relative}
+.scr .tv{aspect-ratio:16/10;border-radius:16px;background:#0b0a0e;border:6px solid #23202a;overflow:hidden;position:relative;transition:transform .25s ease,border-color .25s}
+.scr .tv svg{position:absolute;inset:0;width:100%;height:100%}
+.scr .stand{width:34%;height:8px;margin:0 auto;background:#23202a;border-radius:0 0 8px 8px}
+.scr .cap{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-inline:4px}
+.scr .cap b{font:700 17px Archivo,sans-serif}
+.scr .cap span{color:var(--mute);font-size:14px;white-space:nowrap}
+.scr:hover .tv{transform:translateY(-3px)}
+.scr:focus-visible .tv{outline:3px solid var(--lil);outline-offset:3px}
+.scr[aria-pressed=true] .tv{border-color:var(--red)}
+.scr[aria-pressed=true] .cap b::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-inline-start:8px;vertical-align:middle;box-shadow:0 0 0 4px var(--glow)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-block:28px 18px;border-bottom:1px solid var(--line)}
+.bar h2{font-size:26px;margin-inline-end:auto}
+.chip{font:500 15px Inter,sans-serif;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:0 16px;height:44px;cursor:pointer}
+.chip:hover{background:var(--panel2)}
+.chip:focus-visible,.fav:focus-visible,.go:focus-visible{outline:3px solid var(--lil);outline-offset:2px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+select.chip{padding-inline:14px 34px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 18px) 19px,calc(100% - 13px) 19px;background-size:5px 5px;background-repeat:no-repeat}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;padding-block:22px 56px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:border-color .2s}
+.card:hover{border-color:color-mix(in srgb,var(--red) 50%,var(--line))}
+.top{display:flex;gap:12px;align-items:center}
+.mono{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font:800 19px Archivo,sans-serif;color:#fff;flex:none}
+.top h3{font-size:19px}
+.top small{display:block;color:var(--mute);font-size:13px;margin-top:3px}
+.fav{all:unset;margin-inline-start:auto;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;cursor:pointer;color:var(--mute)}
+.fav:hover{background:var(--panel2)}
+.fav svg{width:22px;height:22px}
+.fav[aria-pressed=true]{color:var(--red)}
+.fav[aria-pressed=true] path{fill:currentColor}
+.card p{margin:0;color:var(--mute);font-size:15px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--panel2);white-space:nowrap}
+.tag.free{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--redink)}
+.go{display:flex;justify-content:center;align-items:center;gap:8px;height:44px;border-radius:12px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600}
+.go:hover{background:var(--red);color:#fff}
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--mute)}
+.empty b{display:block;font:700 22px Archivo,sans-serif;color:var(--ink);margin-bottom:6px}
+.note{color:var(--mute);font-size:13px;margin:-34px 0 48px}
+.about{background:var(--panel);border-block:1px solid var(--line)}
+.about .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) repeat(3,minmax(0,1fr));gap:28px;padding-block:clamp(36px,5vw,64px)}
+.about h2{font-size:clamp(28px,3.4vw,38px);text-wrap:balance}
+.about h3{font-size:18px;margin-bottom:6px}
+.about p{margin:0;color:var(--mute);font-size:15px}
+.num{font:800 15px Archivo,sans-serif;color:var(--redink);display:block;margin-bottom:10px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;padding-block:28px;color:var(--mute);font-size:14px}
+footer .logo{font-size:17px;color:var(--ink)}
+footer p{margin:0;flex:1 1 320px}
+@media(max-width:900px){.about .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.about .wrap>div:first-child{grid-column:1/-1}}
+@media(max-width:720px){.screens{grid-template-columns:repeat(2,minmax(0,1fr))}.nav nav a:not(.keep){display:none}}
+@media(max-width:600px){.search kbd{display:none}.about .wrap{grid-template-columns:minmax(0,1fr)}.bar h2{flex-basis:100%}.screens{gap:12px}.scr .tv{border-width:4px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.eq rect{animation:eq 1.1s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}
+@keyframes eq{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="StreamWay home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#ff4f45"/><path d="M12 9.5v13l10.5-6.5z" fill="#fff"/></svg>
+      StreamWay
+    </a>
+    <nav aria-label="Main">
+      <a class="keep" href="#browse">Browse</a>
+      <a href="#browse" id="navFav">Favorites</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <h1>Every place to stream, in one place</h1>
+      <p>Movies, TV series, anime and live sports. Pick a channel, find a service, and start watching.</p>
+      <label class="search" for="q">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search services, like anime or free movies" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <div class="screens" id="screens" role="group" aria-label="Categories"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="browse">
+    <div class="bar">
+      <h2 id="heading">All services</h2>
+      <button class="chip" id="freeOnly" aria-pressed="false">Free only</button>
+      <button class="chip" id="favOnly" aria-pressed="false">Favorites</button>
+      <label for="sort" class="sr" style="position:absolute;left:-9999px">Sort</label>
+      <select class="chip" id="sort">
+        <option value="az">A to Z</option>
+        <option value="free">Free first</option>
+      </select>
+    </div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+    <p class="note">Sample listings shown. Swap them for your own in the <code>SITES</code> list in this file.</p>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div><h2>Less searching, more watching</h2></div>
+      <div><span class="num">1</span><h3>Pick a channel</h3><p>Choose Movies, TV, Anime or Sports, or search by name.</p></div>
+      <div><span class="num">2</span><h3>Compare at a glance</h3><p>Each listing shows what it's best for and whether it's free or paid.</p></div>
+      <div><span class="num">3</span><h3>Save your go-tos</h3><p>Tap the heart to keep your favorites one click away on this device.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="logo"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#ff4f45"/><path d="M12 9.5v13l10.5-6.5z" fill="#fff"/></svg>StreamWay</span>
+    <p>StreamWay doesn't host any video. Every link goes to the service's own website.</p>
+    <span>© 2026 StreamWay</span>
+  </div>
+</footer>
+
+<script>
+{
+const CATS = [
+  {id:'movies', name:'Movies', hue:'#ff4f45'},
+  {id:'tv', name:'TV series', hue:'#7c66ff'},
+  {id:'anime', name:'Anime', hue:'#ff8a3d'},
+  {id:'sports', name:'Live sports', hue:'#22b07d'}
+];
+
+// Edit this list to change what the directory shows.
+const SITES = [
+  {name:'Tubi', url:'https://tubi.tv', cats:['movies','tv','anime'], free:true, note:'Free with ads', desc:'Huge free library of movies and shows, no account needed.', color:'#7b2cf5'},
+  {name:'Pluto TV', url:'https://pluto.tv', cats:['movies','tv','sports'], free:true, note:'Free with ads', desc:'Hundreds of live channels plus on-demand movies, set up like cable.', color:'#1a1a1a'},
+  {name:'The Roku Channel', url:'https://therokuchannel.roku.com', cats:['movies','tv'], free:true, note:'Free with ads', desc:'Free movies, series and live channels in the browser.', color:'#6c3c97'},
+  {name:'Kanopy', url:'https://www.kanopy.com', cats:['movies'], free:true, note:'Library card', desc:'Films and documentaries, free through many public libraries.', color:'#e0503a'},
+  {name:'Hoopla', url:'https://www.hoopladigital.com', cats:['movies','tv'], free:true, note:'Library card', desc:'Borrow movies and TV episodes with a library card.', color:'#1b74c5'},
+  {name:'RetroCrush', url:'https://www.retrocrush.tv', cats:['anime'], free:true, note:'Free with ads', desc:'Classic and older anime series and films.', color:'#e8364f'},
+  {name:'Netflix', url:'https://www.netflix.com', cats:['movies','tv','anime'], free:false, note:'Subscription', desc:'Big originals, series and a growing anime lineup.', color:'#c4111b'},
+  {name:'HBO Max', url:'https://www.hbomax.com', cats:['movies','tv'], free:false, note:'Subscription', desc:'HBO series, Warner Bros. films and more.', color:'#2a2fbf'},
+  {name:'Hulu', url:'https://www.hulu.com', cats:['tv','movies','anime'], free:false, note:'Subscription', desc:'Next-day TV episodes and a deep series catalog.', color:'#14a35a'},
+  {name:'Prime Video', url:'https://www.primevideo.com', cats:['movies','tv','sports'], free:false, note:'Subscription', desc:'Movies, originals and some live sports.', color:'#1399d6'},
+  {name:'Crunchyroll', url:'https://www.crunchyroll.com', cats:['anime'], free:false, note:'Subscription', desc:'The biggest anime library, with new episodes soon after Japan.', color:'#f47521'},
+  {name:'HIDIVE', url:'https://www.hidive.com', cats:['anime'], free:false, note:'Subscription', desc:'Anime simulcasts, dubs and cult classics.', color:'#00aeef'},
+  {name:'Peacock', url:'https://www.peacocktv.com', cats:['sports','tv','movies'], free:false, note:'Subscription', desc:'Premier League, NBC sports and NBC shows.', color:'#111111'},
+  {name:'ESPN', url:'https://www.espn.com/watch/', cats:['sports'], free:false, note:'Subscription', desc:'Live games, college sports and ESPN originals.', color:'#d00'},
+  {name:'DAZN', url:'https://www.dazn.com', cats:['sports'], free:false, note:'Subscription', desc:'Boxing, MMA, soccer and other live events.', color:'#222'},
+  {name:'Fubo', url:'https://www.fubo.tv', cats:['sports','tv'], free:false, note:'Subscription', desc:'Live TV with a heavy focus on sports channels.', color:'#e8452c'}
+];
+
+// Small drawings shown on each category "screen"
+const ART = {
+  movies:`<rect width="160" height="100" fill="#1b1016"/><path d="M0 100 L60 40 L95 70 L120 50 L160 85 V100Z" fill="#ff4f45" opacity=".9"/><circle cx="122" cy="26" r="12" fill="#ffd2c9"/><rect x="0" y="0" width="160" height="10" fill="#000" opacity=".5"/><rect x="0" y="90" width="160" height="10" fill="#000" opacity=".5"/>`,
+  tv:`<rect width="160" height="100" fill="#14102a"/><rect x="18" y="22" width="56" height="56" rx="8" fill="#7c66ff"/><rect x="84" y="22" width="58" height="24" rx="6" fill="#ab9cff"/><rect x="84" y="54" width="40" height="24" rx="6" fill="#4b3bb5"/><circle cx="46" cy="50" r="13" fill="#fff" opacity=".9"/><path d="M42 43v14l12-7z" fill="#7c66ff"/>`,
+  anime:`<rect width="160" height="100" fill="#26120a"/><circle cx="80" cy="54" r="30" fill="#ff8a3d"/><circle cx="70" cy="46" r="10" fill="#ffc79e" opacity=".8"/><path d="M20 100 Q80 60 140 100Z" fill="#ffb27a"/><g fill="#fff"><path d="M30 20l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/><path d="M130 18l2 5 5 1-4 3 1 5-4-2-4 2 1-5-4-3 5-1z" opacity=".7"/></g>`,
+  sports:`<rect width="160" height="100" fill="#0b2018"/><rect x="10" y="14" width="140" height="72" rx="4" fill="none" stroke="#22b07d" stroke-width="3"/><line x1="80" y1="14" x2="80" y2="86" stroke="#22b07d" stroke-width="3"/><circle cx="80" cy="50" r="14" fill="none" stroke="#22b07d" stroke-width="3"/><circle cx="104" cy="40" r="6" fill="#fff"/><rect x="118" y="20" width="26" height="12" rx="3" fill="#ff4f45"/><text x="131" y="29" font-size="8" font-family="Inter" font-weight="700" fill="#fff" text-anchor="middle">LIVE</text>`
+};
+
+let state = {cat:'all', q:'', free:false, favOnly:false, sort:'az'};
+let favs = [];
+try { favs = JSON.parse(localStorage.getItem('sw-favs') || '[]'); } catch (e) { favs = []; }
+const saveFavs = () => { try { localStorage.setItem('sw-favs', JSON.stringify(favs)); } catch (e) {} };
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const count = id => SITES.filter(s => s.cats.includes(id)).length;
+const catName = id => (CATS.find(c => c.id === id) || {}).name || id;
+
+function renderScreens(){
+  $('#screens').innerHTML = CATS.map(c => `
+    <button class="scr" data-cat="${c.id}" aria-pressed="${state.cat === c.id}">
+      <div class="tv"><svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${ART[c.id]}</svg></div>
+      <div class="stand"></div>
+      <div class="cap"><b>${c.name}</b><span>${count(c.id)} services</span></div>
+    </button>`).join('');
+}
+
+function list(){
+  const q = state.q.trim().toLowerCase();
+  let out = SITES.filter(s =>
+    (state.cat === 'all' || s.cats.includes(state.cat)) &&
+    (!state.free || s.free) &&
+    (!state.favOnly || favs.includes(s.name)) &&
+    (!q || (s.name + ' ' + s.desc + ' ' + s.note + ' ' + s.cats.map(catName).join(' ') + (s.free ? ' free' : '')).toLowerCase().includes(q))
+  );
+  out.sort((a, b) => state.sort === 'free' && a.free !== b.free ? (a.free ? -1 : 1) : a.name.localeCompare(b.name));
+  return out;
+}
+
+function renderGrid(){
+  const items = list();
+  const label = state.favOnly ? 'Your favorites' : state.cat === 'all' ? 'All services' : catName(state.cat);
+  $('#heading').textContent = `${label} (${items.length})`;
+  if (!items.length) {
+    $('#grid').innerHTML = `<div class="empty"><b>Nothing matches yet</b>${state.favOnly ? 'Tap the heart on any service to save it here.' : 'Try another search or turn off a filter.'}</div>`;
+    return;
+  }
+  $('#grid').innerHTML = items.map(s => {
+    const on = favs.includes(s.name);
+    return `<article class="card">
+      <div class="top">
+        <div class="mono" style="background:${esc(s.color)}">${esc(s.name[0])}</div>
+        <div><h3>${esc(s.name)}</h3><small>${s.cats.map(catName).join(' · ')}</small></div>
+        <button class="fav" data-fav="${esc(s.name)}" aria-pressed="${on}" aria-label="${on ? 'Remove' : 'Save'} ${esc(s.name)} ${on ? 'from' : 'to'} favorites">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+        </button>
+      </div>
+      <p>${esc(s.desc)}</p>
+      <div class="tags"><span class="tag ${s.free ? 'free' : ''}">${s.free ? 'Free' : 'Paid'}</span><span class="tag">${esc(s.note)}</span></div>
+      <a class="go" href="${esc(s.url)}" target="_blank" rel="noopener">Visit ${esc(s.name)} <span aria-hidden="true">↗</span></a>
+    </article>`;
+  }).join('');
+}
+
+function render(){ renderScreens(); renderGrid(); }
+
+function setCat(id){
+  state.cat = state.cat === id ? 'all' : id;
+  state.favOnly = false; $('#favOnly').setAttribute('aria-pressed', 'false');
+  try { history.replaceState(null, '', state.cat === 'all' ? location.pathname : '#' + state.cat); } catch (e) {}
+  render();
+}
+
+$('#screens').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (b) { setCat(b.dataset.cat); $('#browse').scrollIntoView({behavior:'smooth'}); } });
+$('#grid').addEventListener('click', e => {
+  const b = e.target.closest('[data-fav]'); if (!b) return;
+  const n = b.dataset.fav;
+  favs = favs.includes(n) ? favs.filter(x => x !== n) : [...favs, n];
+  saveFavs(); renderGrid();
+});
+$('#q').addEventListener('input', e => { state.q = e.target.value; renderGrid(); });
+$('#freeOnly').addEventListener('click', e => { state.free = !state.free; e.currentTarget.setAttribute('aria-pressed', state.free); renderGrid(); });
+$('#favOnly').addEventListener('click', e => { state.favOnly = !state.favOnly; e.currentTarget.setAttribute('aria-pressed', state.favOnly); renderGrid(); });
+$('#navFav').addEventListener('click', () => { state.favOnly = true; $('#favOnly').setAttribute('aria-pressed', 'true'); renderGrid(); });
+$('#sort').addEventListener('change', e => { state.sort = e.target.value; renderGrid(); });
+document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); } });
+
+const fromHash = () => { const h = location.hash.slice(1); state.cat = CATS.some(c => c.id === h) ? h : 'all'; render(); };
+window.addEventListener('hashchange', fromHash);
+fromHash();
+}
+</script>
+</body>
+</html>
