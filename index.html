@@ -64,7 +64,7 @@ kbd{font:12px/1 Inter,sans-serif;color:var(--ink2);background:var(--raised);bord
 .cap b{font:500 16px Archivo,sans-serif;display:flex;align-items:center;gap:8px}
 .cap span{color:var(--mute);font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);display:none}
-.scr:hover .tv{transform:translateY(-2px)}
+.scr:hover .frame{transform:translateY(-2px)}
 .scr:focus-visible .tv{outline:2px solid var(--blue);outline-offset:4px}
 .scr:hover .tv{border-color:var(--blue2)}
 .scr:hover .dot{display:inline-block}
@@ -77,6 +77,17 @@ kbd{font:12px/1 Inter,sans-serif;color:var(--ink2);background:var(--raised);bord
 .tv.small{width:168px;flex:none;border-width:3px;border-radius:10px}
 .vtitle h1{font-size:clamp(32px,4.4vw,48px);line-height:1.05;letter-spacing:-.02em}
 .vtitle p{color:var(--ink2);margin:8px 0 0;max-width:36rem}
+/* Moving lights: one shared angle (--a) drives all three screens, so they always move together */
+@property --a{syntax:'<angle>';inherits:true;initial-value:0deg}
+:root{animation:orbit 6s linear infinite}
+@keyframes orbit{to{--a:360deg}}
+.frame{position:relative;border-radius:12px;transition:transform .2s var(--ease)}
+.frame::before,.frame::after{content:"";position:absolute;pointer-events:none;box-sizing:border-box;
+background:conic-gradient(from var(--a),rgba(74,141,255,.16) 0deg,rgba(42,95,196,.55) 30deg,#4a8dff 70deg,#ffffff 88deg,rgba(74,141,255,.16) 90deg,rgba(74,141,255,.16) 180deg,rgba(100,110,130,.6) 210deg,#a7aebb 250deg,#f4f7ff 268deg,rgba(74,141,255,.16) 270deg);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.frame::before{inset:0;padding:4px;border-radius:12px}
+.frame::after{inset:-7px;padding:7px;border-radius:19px;opacity:.6}
+@media(prefers-reduced-motion:reduce){:root{animation:none}}
 .bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:32px 8px}
 .bar .search{flex:1 1 280px;max-width:none;height:40px}
 .count{font:500 14px Inter,sans-serif;color:var(--mute);margin:16px 0 12px;font-variant-numeric:tabular-nums}
@@ -260,7 +271,7 @@ const heart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 function renderScreens(){
   $('#screens').innerHTML = CATS.map(c => `
     <a class="scr" href="#${c.id}">
-      <div class="tv"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${ART[c.id]}</svg></div>
+      <div class="frame"><div class="tv"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${ART[c.id]}</svg></div></div>
       <div class="stand"></div>
       <div class="cap"><b><i class="dot" aria-hidden="true"></i>${esc(c.name)}</b>${count(c.id) ? `<span>${count(c.id)} ${count(c.id) === 1 ? 'service' : 'services'}</span>` : ''}</div>
     </a>`).join('');
