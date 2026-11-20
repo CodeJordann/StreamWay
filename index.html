@@ -301,8 +301,8 @@ function renderGrid(){
   }).join('') + (state.view !== 'favorites' ? slotCard : '');
 }
 
-function route(){
-  const h = location.hash.slice(1);
+function route(forced){
+  const h = typeof forced === 'string' ? forced : location.hash.slice(1);
   const cat = CATS.find(c => c.id === h);
   state.view = cat ? cat.id : h === 'favorites' ? 'favorites' : 'home';
   const home = state.view === 'home';
@@ -348,8 +348,20 @@ $('#q').addEventListener('input', e => { state.q = e.target.value; renderGrid();
 $('#freeOnly').addEventListener('click', e => { state.free = !state.free; e.currentTarget.setAttribute('aria-pressed', state.free); renderGrid(); });
 $('#sort').addEventListener('change', e => { state.sort = e.target.value; renderGrid(); });
 document.addEventListener('keydown', e => { if (e.key === '/' && !$('#view').hidden && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); } });
-window.addEventListener('hashchange', route);
-route();
+// Switch pages directly on click, so it works even where links are blocked
+function go(view){
+  route(view);
+  try { history.pushState(null, '', view ? '#' + view : location.pathname + location.search); } catch (e) {}
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || e.metaKey || e.ctrlKey) return;
+  e.preventDefault();
+  go(a.getAttribute('href').slice(1));
+});
+window.addEventListener('hashchange', () => route());
+window.addEventListener('popstate', () => route());
+try { route(); } catch (e) { route(''); }
 }
 </script>
 </body>
