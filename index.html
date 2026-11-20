@@ -105,21 +105,17 @@ select.chip{padding-inline:14px 32px;appearance:none;background-image:linear-gra
 .empty b{display:block;font:500 20px Archivo,sans-serif;color:var(--ink);margin-bottom:4px}
 .note{color:var(--mute);font-size:13px;margin:-48px 0 64px}
 [hidden]{display:none!important}
-dialog{width:min(560px,calc(100vw - 32px));max-height:min(60vh,520px);padding:24px;border:1px solid var(--line2);border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 24px 64px rgba(0,0,0,.5);overflow:auto}
+dialog{position:fixed;width:min(880px,calc(100vw - 32px));max-height:min(60vh,520px);padding:56px 24px 24px;border:1px solid var(--line2);border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 24px 64px rgba(0,0,0,.5);overflow:auto}
 dialog::backdrop{background:rgba(3,4,8,.7);backdrop-filter:blur(2px)}
 dialog[open]{animation:pop .3s var(--ease)}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.mtop{display:flex;gap:16px;align-items:center}
-.mtop .mono{grid-row:auto}
-.mtop h2{font-size:24px;line-height:1.15}
-.close{all:unset;margin-inline-start:auto;width:40px;height:40px;display:grid;place-items:center;border-radius:8px;color:var(--ink2);cursor:pointer;flex:none;align-self:flex-start}
+.close{all:unset;position:absolute;top:12px;right:12px;width:40px;height:40px;display:grid;place-items:center;border-radius:8px;color:var(--ink2);cursor:pointer}
 .close:hover{background:var(--raised);color:var(--ink)}
 .close:focus-visible{outline:2px solid var(--blue)}
 .close svg{width:20px;height:20px}
-#mDesc{color:var(--ink2);margin:16px 0 20px}
-.slot{display:flex;align-items:center;justify-content:center;gap:8px;min-height:96px;border:1px dashed var(--line2);border-radius:12px;background:var(--bg);color:var(--mute);font-weight:500}
+.slot{display:flex;align-items:center;justify-content:center;gap:8px;min-height:160px;border:1px dashed var(--line2);border-radius:12px;background:var(--bg);color:var(--mute);font-weight:500}
 .slot svg{width:18px;height:18px}
-.golink{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:10px;background:var(--silver);color:var(--deep);font-weight:600;text-decoration:none}
+.golink{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:10px;background:var(--silver);color:var(--deep);font-weight:600;text-decoration:none}
 .golink:hover{background:#e2e5eb}
 .card{cursor:pointer}
 .card h3 button{all:unset;cursor:pointer}
@@ -196,8 +192,7 @@ footer p{margin:0;flex:1 1 320px}
       </div>
       <h2 class="count" id="heading"></h2>
       <div class="grid" id="grid" aria-live="polite"></div>
-      <p class="note">Sample listings. Add your own links to the SITES list in this file.</p>
-    </div>
+          </div>
   </section>
 
   <section class="about home" id="about">
@@ -210,15 +205,10 @@ footer p{margin:0;flex:1 1 320px}
   </section>
 </main>
 
-<dialog id="modal" aria-labelledby="mName">
-  <div class="mtop">
-    <div class="mono" id="mMono" aria-hidden="true"></div>
-    <div><h2 id="mName"></h2><div class="meta" id="mMeta"></div></div>
-    <button class="close" id="mClose" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6 6 18"/></svg>
-    </button>
-  </div>
-  <p id="mDesc"></p>
+<dialog id="modal" aria-label="Link">
+  <button class="close" id="mClose" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
   <div id="mLink"></div>
 </dialog>
 
@@ -238,25 +228,10 @@ const CATS = [
   {id:'sports', name:'Live sports', desc:'Live games, fights and sports channels'}
 ];
 
-// Edit this list to change what the directory shows.
-// Put each service's link between the quotes after link: (for example link:'https://example.com').
 const SITES = [
-  {name:'Tubi', link:'', cats:['movies-tv','anime'], free:true, desc:'Huge free library of movies and shows, no account needed'},
-  {name:'Pluto TV', link:'', cats:['movies-tv','sports'], free:true, desc:'Hundreds of live channels plus on-demand movies, set up like cable'},
-  {name:'The Roku Channel', link:'', cats:['movies-tv'], free:true, desc:'Free movies, series and live channels in the browser'},
-  {name:'Kanopy', link:'', cats:['movies-tv'], free:true, desc:'Films and documentaries, free through many public libraries'},
-  {name:'Hoopla', link:'', cats:['movies-tv'], free:true, desc:'Borrow movies and TV episodes with a library card'},
-  {name:'RetroCrush', link:'', cats:['anime'], free:true, desc:'Classic and older anime series and films'},
-  {name:'Netflix', link:'', cats:['movies-tv','anime'], free:false, desc:'Big originals, series and a growing anime lineup'},
-  {name:'HBO Max', link:'', cats:['movies-tv'], free:false, desc:'HBO series, Warner Bros. films and more'},
-  {name:'Hulu', link:'', cats:['movies-tv','anime'], free:false, desc:'Next-day TV episodes and a deep series catalog'},
-  {name:'Prime Video', link:'', cats:['movies-tv','sports'], free:false, desc:'Movies, originals and some live sports'},
-  {name:'Crunchyroll', link:'', cats:['anime'], free:false, desc:'The biggest anime library, with new episodes soon after Japan'},
-  {name:'HIDIVE', link:'', cats:['anime'], free:false, desc:'Anime simulcasts, dubs and cult classics'},
-  {name:'Peacock', link:'', cats:['sports','movies-tv'], free:false, desc:'Premier League, NBC sports and NBC shows'},
-  {name:'ESPN', link:'', cats:['sports'], free:false, desc:'Live games, college sports and ESPN originals'},
-  {name:'DAZN', link:'', cats:['sports'], free:false, desc:'Boxing, MMA, soccer and other live events'},
-  {name:'Fubo', link:'', cats:['sports','movies-tv'], free:false, desc:'Live TV with a heavy focus on sports channels'}
+  // Add your services here, one per line, like this (remove the // to use it):
+  // {name:'Service name', cats:['anime'], free:true, desc:'Short description', link:'https://...'},
+  // cats can be 'movies-tv', 'anime' or 'sports' (or several, like ['movies-tv','sports'])
 ];
 
 // Illustrations on each category "screen"
@@ -282,7 +257,7 @@ function renderScreens(){
     <a class="scr" href="#${c.id}">
       <div class="tv"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${ART[c.id]}</svg></div>
       <div class="stand"></div>
-      <div class="cap"><b><i class="dot" aria-hidden="true"></i>${esc(c.name)}</b><span>${count(c.id)} services</span></div>
+      <div class="cap"><b><i class="dot" aria-hidden="true"></i>${esc(c.name)}</b>${count(c.id) ? `<span>${count(c.id)} ${count(c.id) === 1 ? 'service' : 'services'}</span>` : ''}</div>
     </a>`).join('');
 }
 
@@ -299,9 +274,9 @@ function list(){
 
 function renderGrid(){
   const items = list();
-  $('#heading').textContent = `${items.length} ${items.length === 1 ? 'service' : 'services'}`;
+  $('#heading').textContent = items.length ? `${items.length} ${items.length === 1 ? 'service' : 'services'}` : '';
   if (!items.length) {
-    $('#grid').innerHTML = `<div class="empty"><b>Nothing here yet</b>${state.view === 'favorites' && !favs.length ? 'Tap the heart on any service to save it here' : 'Try another search or turn off Free only'}</div>`;
+    $('#grid').innerHTML = `<div class="empty"><b>Nothing here yet</b>${!SITES.length ? 'Services will show up here once they are added' : state.view === 'favorites' && !favs.length ? 'Tap the heart on any service to save it here' : 'Try another search or turn off Free only'}</div>`;
     return;
   }
   $('#grid').innerHTML = items.map(s => {
@@ -348,10 +323,6 @@ $('#grid').addEventListener('click', e => {
 const modal = $('#modal');
 function openModal(name){
   const s = SITES.find(x => x.name === name); if (!s) return;
-  $('#mMono').textContent = s.name[0];
-  $('#mName').textContent = s.name;
-  $('#mMeta').innerHTML = (s.free ? '<span class="free">Free</span>' : 'Paid') + ' · ' + s.cats.map(catName).join(', ');
-  $('#mDesc').textContent = s.desc;
   $('#mLink').innerHTML = s.link
     ? `<a class="golink" href="${esc(s.link)}" target="_blank" rel="noopener">Open ${esc(s.name)}</a>`
     : `<div class="slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Insert link</div>`;
