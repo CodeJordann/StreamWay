@@ -118,6 +118,11 @@ dialog[open]{animation:pop .3s var(--ease)}
 .golink{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:10px;background:var(--silver);color:var(--deep);font-weight:600;text-decoration:none}
 .golink:hover{background:#e2e5eb}
 .card{cursor:pointer}
+.card.add{display:block;padding:0;background:transparent;border-style:dashed;border-color:var(--line2)}
+.card.add:hover{background:var(--card)}
+.addbtn{all:unset;box-sizing:border-box;width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink2);font-weight:500;cursor:pointer;border-radius:14px}
+.addbtn svg{width:18px;height:18px}
+.addbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .card h3 button{all:unset;cursor:pointer}
 .card h3 button::after{content:"";position:absolute;inset:0;border-radius:14px}
 .card h3 button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -272,9 +277,13 @@ function list(){
   return out;
 }
 
+const slotCard = `<article class="card add"><button class="addbtn" data-slot>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Insert link</button></article>`;
+
 function renderGrid(){
   const items = list();
   $('#heading').textContent = items.length ? `${items.length} ${items.length === 1 ? 'service' : 'services'}` : '';
+  if (!items.length && state.view !== 'favorites') { $('#grid').innerHTML = slotCard; return; }
   if (!items.length) {
     $('#grid').innerHTML = `<div class="empty"><b>Nothing here yet</b>${!SITES.length ? 'Services will show up here once they are added' : state.view === 'favorites' && !favs.length ? 'Tap the heart on any service to save it here' : 'Try another search or turn off Free only'}</div>`;
     return;
@@ -289,7 +298,7 @@ function renderGrid(){
       <div class="meta">${s.free ? '<span class="free">Free</span>' : 'Paid'}${others.length ? ' · Also ' + others.join(', ') : ''}</div>
       <p>${esc(s.desc)}</p>
     </article>`;
-  }).join('');
+  }).join('') + (state.view !== 'favorites' ? slotCard : '');
 }
 
 function route(){
@@ -322,7 +331,7 @@ $('#grid').addEventListener('click', e => {
 });
 const modal = $('#modal');
 function openModal(name){
-  const s = SITES.find(x => x.name === name); if (!s) return;
+  const s = SITES.find(x => x.name === name) || {name:'', link:''};
   $('#mLink').innerHTML = s.link
     ? `<a class="golink" href="${esc(s.link)}" target="_blank" rel="noopener">Open ${esc(s.name)}</a>`
     : `<div class="slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Insert link</div>`;
@@ -331,7 +340,10 @@ function openModal(name){
 const closeModal = () => { if (modal.close) modal.close(); else modal.removeAttribute('open'); };
 $('#mClose').addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-$('#grid').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openModal(b.dataset.open); });
+$('#grid').addEventListener('click', e => {
+  if (e.target.closest('[data-slot]')) { openModal(null); return; }
+  const b = e.target.closest('[data-open]'); if (b) openModal(b.dataset.open);
+});
 $('#q').addEventListener('input', e => { state.q = e.target.value; renderGrid(); });
 $('#freeOnly').addEventListener('click', e => { state.free = !state.free; e.currentTarget.setAttribute('aria-pressed', state.free); renderGrid(); });
 $('#sort').addEventListener('change', e => { state.sort = e.target.value; renderGrid(); });
