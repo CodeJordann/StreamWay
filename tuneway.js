@@ -7,7 +7,12 @@ const CATS = [
 const SITES = [
   // Add your services here, one per line, like this (remove the // to use it):
   {name:'Aniwave', cats:['anime'], free:true, desc:'Short description', link:'https://aniwaves.tv/home'},
-  // cats can be 'movies-tv', 'anime' or 'sports' (or several, like ['movies-tv','sports'])
+  {name:'AnimeSogo', cats:['anime'], free:true, desc:'Short description', link:'https://animesogo.to/home'},
+  {name:'JustAnime', cats:['anime'], free:true, desc:'Short description', link:'https://justanime.to/'},
+  {name:'h!anime', cats:['anime'], free:true, desc:'Short description', link:'https://hianime.ms/home'},
+  {name:'miruro', cats:['anime'], free:true, desc:'Short description', link:'https://miruro.cx/'},
+  {name:'AnimeKai', cats:['anime'], free:true, desc:'Short description', link:'https://animekai.be/'},
+
 ];
 
 // Illustrations on each category "screen"
