@@ -5,8 +5,14 @@ const CATS = [
 ];
 
 const SITES = [
-  // Add your services here, one per line, like this (remove the // to use it):
-  {name:'Crunchyroll', cats:['anime'], free:true, desc:'Short description', link:'https://www.crunchyroll.com/'},
+  // One service per line: {name:'', cats:['anime'], free:true, desc:'', link:'https://...'},
+  // cats can be 'movies-tv', 'anime' or 'sports' (or several, like ['anime','movies-tv'])
+  {name:'Crunchyroll', cats:['anime'], free:false, desc:'The biggest anime library, with new episodes soon after Japan', link:'https://www.crunchyroll.com/'},
+  {name:'HIDIVE', cats:['anime'], free:false, desc:'Simulcasts plus niche and classic series', link:'https://www.hidive.com/'},
+  {name:'Netflix', cats:['anime','movies-tv'], free:false, desc:'Movies, series and anime, including Netflix originals', link:'https://www.netflix.com/'},
+  {name:'Tubi', cats:['anime','movies-tv'], free:true, desc:'Free with ads, no account needed. Big dubbed anime library', link:'https://tubitv.com/'},
+  {name:'Pluto TV', cats:['anime','movies-tv'], free:true, desc:'Free with ads. 24/7 anime channels plus on-demand shows', link:'https://pluto.tv/'},
+  {name:'RetroCrush', cats:['anime'], free:true, desc:'Free with ads. Classic anime from the 70s, 80s and 90s', link:'https://www.retrocrush.tv/'},
 ];
 
 // Illustrations on each category "screen"
@@ -47,15 +53,11 @@ function list(){
   return out;
 }
 
-const slotCard = `<article class="card add"><button class="addbtn" data-slot>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Insert link</button></article>`;
-
 function renderGrid(){
   const items = list();
   $('#heading').textContent = items.length ? `${items.length} ${items.length === 1 ? 'service' : 'services'}` : '';
-  if (!items.length && state.view !== 'favorites') { $('#grid').innerHTML = slotCard; return; }
   if (!items.length) {
-    $('#grid').innerHTML = `<div class="empty"><b>Nothing here yet</b>${!SITES.length ? 'Services will show up here once they are added' : state.view === 'favorites' && !favs.length ? 'Tap the heart on any service to save it here' : 'Try another search or turn off Free only'}</div>`;
+    $('#grid').innerHTML = `<div class="empty"><b>Nothing here yet</b>${state.view === 'favorites' && !favs.length ? 'Tap the heart on any service to save it here' : state.q.trim() || state.free ? 'Try another search or turn off Free only' : 'Links for this channel are coming soon'}</div>`;
     return;
   }
   $('#grid').innerHTML = items.map(s => {
@@ -69,7 +71,7 @@ function renderGrid(){
       <div class="meta">${s.free ? '<span class="free">Free</span>' : 'Paid'}${others.length ? ' · Also ' + others.join(', ') : ''}</div>
       <p>${esc(s.desc)}</p>
     </article>`;
-  }).join('') + (state.view !== 'favorites' ? slotCard : '');
+  }).join('');
 }
 
 function route(forced){
@@ -105,14 +107,13 @@ function openModal(name){
   const s = SITES.find(x => x.name === name) || {name:'', link:''};
   $('#mLink').innerHTML = s.link
     ? `<a class="golink" href="${esc(s.link)}" target="_blank" rel="noopener">Open ${esc(s.name)}</a>`
-    : `<div class="slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Insert link</div>`;
+    : `<div class="slot">Link coming soon</div>`;
   if (modal.showModal) modal.showModal(); else modal.setAttribute('open', '');
 }
 const closeModal = () => { if (modal.close) modal.close(); else modal.removeAttribute('open'); };
 $('#mClose').addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 $('#grid').addEventListener('click', e => {
-  if (e.target.closest('[data-slot]')) { openModal(null); return; }
   const b = e.target.closest('[data-open]'); if (b) openModal(b.dataset.open);
 });
 $('#q').addEventListener('input', e => { state.q = e.target.value; renderGrid(); });

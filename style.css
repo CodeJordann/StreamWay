@@ -121,11 +121,6 @@ dialog[open]{animation:pop .3s var(--ease)}
 .golink{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:10px;background:var(--silver);color:var(--deep);font-weight:600;text-decoration:none}
 .golink:hover{background:#e2e5eb}
 .card{cursor:pointer}
-.card.add{display:block;padding:0;background:transparent;border-style:dashed;border-color:var(--line2)}
-.card.add:hover{background:var(--card)}
-.addbtn{all:unset;box-sizing:border-box;width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink2);font-weight:500;cursor:pointer;border-radius:14px}
-.addbtn svg{width:18px;height:18px}
-.addbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .card h3 button{all:unset;cursor:pointer}
 .card h3 button::after{content:"";position:absolute;inset:0;border-radius:14px}
 .card h3 button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
