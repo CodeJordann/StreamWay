@@ -1,7 +1,7 @@
 const CATS = [
   {id:'movies-tv', name:'Movies & TV', desc:'Films, series and live channels, free and paid'},
-  {id:'anime', name:'Anime', desc:'Simulcasts, dubs and classic series'},
-  {id:'sports', name:'Live sports', desc:'Live games, fights and sports channels'}
+  {id:'sports', name:'Live sports', desc:'Live games, fights and sports channels'},
+  {id:'anime', name:'Anime', desc:'Simulcasts, dubs and classic series'}
 ];
 
 const SITES = [
