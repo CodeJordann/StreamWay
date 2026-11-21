@@ -6,7 +6,7 @@ const CATS = [
 
 const SITES = [
   // Add your services here, one per line, like this (remove the // to use it):
-  {name:'Crunchyroll', cats:['anime'], free:true, desc:'Short description', link:'https://www.crunchyroll.com/',
+  {name:'Crunchyroll', cats:['anime'], free:true, desc:'Short description', link:'https://www.crunchyroll.com/'},
 ];
 
 // Illustrations on each category "screen"
