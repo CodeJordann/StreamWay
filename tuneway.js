@@ -1,5 +1,5 @@
 const CATS = [
-  {id:'movies-tv', name:'Movies & TV', desc:'Films, series and live channels, free and paid'},
+  {id:'movies-tv', name:'Movies/TV Shows', desc:'Films, series and live channels, free and paid'},
   {id:'sports', name:'Live sports', desc:'Live games, fights and sports channels'},
   {id:'anime', name:'Anime', desc:'Simulcasts, dubs and classic series'}
 ];
@@ -81,6 +81,7 @@ function route(forced){
   const home = state.view === 'home';
   document.querySelectorAll('.home').forEach(el => el.hidden = !home);
   $('#view').hidden = home;
+  $('#notice').hidden = state.view === 'favorites';
   document.querySelectorAll('.nav nav a').forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + state.view));
   if (home) { renderScreens(); document.title = 'TuneWay'; }
   else {
