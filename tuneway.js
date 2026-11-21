@@ -65,6 +65,7 @@ function renderGrid(){
     return `<article class="card">
       <div class="mono" aria-hidden="true">${esc(s.name[0])}</div>
       <h3><button data-open="${esc(s.name)}">${esc(s.name)}</button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></h3>
+      <a class="url" href="${esc(s.link)}" target="_blank" rel="noopener">${esc(String(s.link).replace(/^https?:\/\//, '').replace(/\/$/, ''))}</a>
       <button class="fav" data-fav="${esc(s.name)}" aria-pressed="${on}" aria-label="${on ? 'Remove' : 'Save'} ${esc(s.name)} ${on ? 'from' : 'to'} favorites">${heart}</button>
       <div class="meta">${s.free ? '<span class="free">Free</span>' : 'Paid'}${others.length ? ' · Also ' + others.join(', ') : ''}</div>
       <p>${esc(s.desc)}</p>

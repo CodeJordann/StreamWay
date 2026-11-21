@@ -86,14 +86,17 @@ background:conic-gradient(from var(--a),rgba(74,141,255,.16) 0deg,rgba(42,95,196
 .chip[aria-pressed=true]{background:var(--silver);color:var(--deep);border-color:var(--silver)}
 select.chip{padding-inline:14px 32px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 16px) 17px,calc(100% - 11px) 17px;background-size:5px 5px;background-repeat:no-repeat}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-block:8px 64px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding-block:8px 64px}
 .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 16px;align-items:start;transition:background-color .15s var(--ease),border-color .15s var(--ease)}
 .card:hover{background:var(--raised);border-color:var(--line2)}
 .mono{grid-row:span 2;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font:600 18px Archivo,sans-serif;color:#0b0d14;background:linear-gradient(#e2e5eb,#a7aebb);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
 .card h3{font-size:17px;line-height:24px;display:flex;align-items:center;gap:6px}
 .card h3 svg{width:14px;height:14px;color:var(--mute);transition:color .15s var(--ease),transform .15s var(--ease)}
 .card:hover h3 svg{color:var(--blue);transform:translateX(2px)}
-.meta{color:var(--mute);font-size:13px;line-height:20px}
+.url{grid-column:2;position:relative;z-index:1;justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--blue);font-size:14px;line-height:20px;text-decoration:none}
+.url:hover{text-decoration:underline}
+.url:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.meta{grid-column:2;color:var(--mute);font-size:13px;line-height:20px}
 .meta .free{color:var(--silver)}
 .card p{grid-column:2/4;margin:8px 0 0;color:var(--ink2);font-size:14px;line-height:20px}
 .fav{all:unset;position:relative;z-index:1;grid-row:span 2;width:40px;height:40px;margin:-6px -8px 0 0;display:grid;place-items:center;border-radius:8px;cursor:pointer;color:var(--mute);transition:color .15s var(--ease),background-color .15s var(--ease)}
