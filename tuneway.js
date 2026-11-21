@@ -6,7 +6,7 @@ const CATS = [
 
 const SITES = [
   // Add your services here, one per line, like this (remove the // to use it):
-  //{name:'Service name', cats:['anime'], free:true, desc:'Short description', link:'https://...'},
+  {name:'Aniwave', cats:['anime'], free:true, desc:'Short description', link:'https://aniwaves.tv/home'},
   // cats can be 'movies-tv', 'anime' or 'sports' (or several, like ['movies-tv','sports'])
 ];
 
