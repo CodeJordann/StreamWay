@@ -7,17 +7,25 @@ const CATS = [
 const SITES = [
   {name:'Netflix', cats:['movies-tv','anime'], free:false, desc:'Huge mix of movies, series and anime, including Netflix originals', link:'https://www.netflix.com/'},
   {name:'Prime Video', cats:['movies-tv','anime'], free:false, desc:'Amazon originals, movies and anime. Included with Amazon Prime', link:'https://www.primevideo.com/'},
-  {name:'HBO Max', cats:['movies-tv'], free:false, desc:'HBO series, Warner Bros. movies and more', link:'https://www.hbomax.com/'},
-  {name:'Apple TV', cats:['movies-tv'], free:false, desc:'Award-winning originals like Severance and Ted Lasso', link:'https://tv.apple.com/'},
-  {name:'Disney+', cats:['movies-tv'], free:false, desc:'Disney, Pixar, Marvel and Star Wars in one place', link:'https://www.disneyplus.com/'},
-  {name:'Crunchyroll', cats:['anime'], free:false, desc:'The biggest anime library, with new episodes soon after Japan', link:'https://www.crunchyroll.com/'},
-  {name:'HIDIVE', cats:['anime'], free:false, desc:'Simulcasts plus niche and classic series', link:'https://www.hidive.com/'},
-  {name:'Hulu', cats:['anime'], free:false, desc:'Popular anime simulcasts alongside next-day TV episodes', link:'https://www.hulu.com/'},
-  {name:'YouTube TV', cats:['sports'], free:false, desc:'100+ live channels, including local networks, ESPN and FS1', link:'https://tv.youtube.com/'},
-  {name:'ESPN', cats:['sports'], free:false, desc:'Live games and studio shows from ESPN, all in one app', link:'https://www.espn.com/'},
-  {name:'Fubo', cats:['sports'], free:false, desc:'Sports-first live TV with more soccer than most', link:'https://www.fubo.tv/'},
-  {name:'Peacock', cats:['sports'], free:false, desc:'NBC Sports, including Sunday Night Football and Premier League', link:'https://www.peacocktv.com/'},
-  {name:'Paramount+', cats:['sports'], free:false, desc:'CBS Sports, including the NFL on CBS and Champions League', link:'https://www.paramountplus.com/'},
+  {name:'Disney+', cats:['movies-tv'], free:false, desc:'', link:'https://www.disneyplus.com/'},
+
+  
+  {name:'Crunchyroll', cats:['anime'], free:false, desc:'', link:'https://www.crunchyroll.com/'},
+  {name:'HIDIVE', cats:['anime'], free:false, desc:'', link:'https://www.hidive.com/'},
+  {name:'Hulu', cats:['anime'], free:false, desc:'', link:'https://www.hulu.com/'},
+  {name:'Aniwave', cats:['anime'], free:true, desc:'', link:'https://aniwaves.tv/home'},
+  {name:'AnimeSogo', cats:['anime'], free:true, desc:'', link:'https://animesogo.to/home'},
+  {name:'JustAnime', cats:['anime'], free:true, desc:'', link:'https://justanime.to/'},
+  {name:'h!anime', cats:['anime'], free:true, desc:'', link:'https://hianime.ms/home'},
+  {name:'miruro', cats:['anime'], free:true, desc:'', link:'https://miruro.cx/'},
+  {name:'AnimeKai', cats:['anime'], free:true, desc:'', link:'https://animekai.be/'},
+
+
+
+  
+  {name:'YouTube TV', cats:['sports'], free:false, desc:'', link:'https://tv.youtube.com/'},
+  {name:'ESPN', cats:['sports'], free:false, desc:'', link:'https://www.espn.com/'},
+  {name:'Paramount+', cats:['sports'], free:false, desc:'', link:'https://www.paramountplus.com/'},
   
 ];
 
