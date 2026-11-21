@@ -80,13 +80,13 @@ function route(forced){
   document.querySelectorAll('.home').forEach(el => el.hidden = !home);
   $('#view').hidden = home;
   document.querySelectorAll('.nav nav a').forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + state.view));
-  if (home) { renderScreens(); document.title = 'StreamWay'; }
+  if (home) { renderScreens(); document.title = 'TuneWay'; }
   else {
     const name = cat ? cat.name : 'Favorites';
     $('#vname').textContent = name;
     $('#vdesc').textContent = cat ? cat.desc : 'Services you saved on this device';
     $('#vart').innerHTML = ART[cat ? cat.id : 'movies-tv'];
-    document.title = name + ' · StreamWay';
+    document.title = name + ' · TuneWay';
     state.q = ''; $('#q').value = '';
     renderGrid();
   }
